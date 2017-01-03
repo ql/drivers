@@ -7,8 +7,7 @@ class Task
 
   has_one :driver
 
-  state_machine :state, :initial => :new do
-
+  state_machine :status, :initial => :new do
     event :assign do
       transition :new => :assigned
     end

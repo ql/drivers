@@ -1,6 +1,12 @@
 development:
   clients:
     default:
-      database: mongoid
+      database: drivers
+      hosts:
+        - localhost:27017
+test:
+  clients:
+    default:
+      database: drivers_test
       hosts:
         - localhost:27017
