@@ -1,4 +1,11 @@
 class Drivers < Sinatra::Base
+  before do
+    if request.body.size > 0
+      request.body.rewind
+      @payload = ActiveSupport::JSON.decode(request.body.read)
+    end
+  end
+
 
   set(:authorized) do |role|
     condition do
@@ -18,12 +25,12 @@ class Drivers < Sinatra::Base
   end
 
   post '/tasks', authorized: :manager do
-    json Task.create(params)
+    json Task.create(@payload)
   end
 
-  get '/tasks/available', authorized: :any do
-    if params[:location]
-      json Task.around(params[:location])
+  post '/tasks/available', authorized: :any do
+    if @payload["location"]
+      json Task.around(@payload["location"])
     else    
       status 400
       json "No location received"
@@ -31,7 +38,7 @@ class Drivers < Sinatra::Base
   end
 
   put '/tasks/:id/assign', authorized: :driver do
-    json Task.find(params[:id]).assign(params[:location])
+    json Task.find(params[:id]).assign
   end
 
   put '/tasks/:id/finish', authorized: :driver do

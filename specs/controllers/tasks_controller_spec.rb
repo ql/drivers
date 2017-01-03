@@ -6,7 +6,7 @@ describe "Tasks" do
   end
 
   subject { last_response }
-  let(:task_attributes) { {pickup: [55.703199, 37.504350], destination: [55.825532, 37.696611]} }
+  let(:task_attributes) { {pickup: [55.703199, 37.504350], destination: [55.825532, 37.696611]}.to_json }
   let(:manager) { Manager.create!(name: 'Vasya') }
   let(:driver) { Driver.create!(name: 'Petya') }
 
@@ -41,14 +41,14 @@ describe "Tasks" do
     end
 
     context "unathenticated user" do
-      before(:each) { get "/tasks/available" }
+      before(:each) { post "/tasks/available" }
       it { should be_unauthorized }
     end
 
     context "role driver" do
       before(:each) do
         header 'Access-Token', driver.token.token
-        get("/tasks/available", {location: [55.745827, 37.568551]})
+        post("/tasks/available", {location: [55.745827, 37.568551]}.to_json)
       end
       it { subject.body.should == [@task1, @task2].to_json }
     end
