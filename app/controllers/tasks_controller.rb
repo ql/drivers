@@ -35,7 +35,7 @@ class Drivers < Sinatra::Base
   end
 
   put '/tasks/:id/finish', authorized: :driver do
-    Task.find(params[:location]).finish!
+    json Task.find(params[:id]).finalize!
   end
 
   get '/unauthorized' do

@@ -14,7 +14,7 @@ class Task
       transition :new => :assigned
     end
 
-    event :finish do
+    event :finalize do
       transition :assigned => :done
     end
   end
