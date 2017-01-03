@@ -1,4 +1,6 @@
+require 'sinatra'
 Bundler.require(:default)
+Mongoid.load!("./config/mongoid.yml", Sinatra::Base.environment)
 class Drivers < Sinatra::Base
 end
 

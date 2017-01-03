@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 gem 'sinatra'
-gem 'mongoid'
+gem 'sinatra-contrib'
+gem 'mongoid', '~> 6.0.0'
 gem 'state_machine'
 gem 'rspec'
 gem 'rack-test'

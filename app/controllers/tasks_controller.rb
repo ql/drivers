@@ -18,15 +18,20 @@ class Drivers < Sinatra::Base
   end
 
   post '/tasks', authorized: :manager do
-    Task.create(params).as_json
+    json Task.create(params)
   end
 
   get '/tasks/available', authorized: :any do
-    Task.around(params[:location])
+    if params[:location]
+      json Task.around(params[:location])
+    else    
+      status 400
+      json "No location received"
+    end
   end
 
   put '/tasks/:id/assign', authorized: :driver do
-    Task.find(params[:id]).assign(params[:location])
+    json Task.find(params[:id]).assign(params[:location])
   end
 
   put '/tasks/:id/finish', authorized: :driver do

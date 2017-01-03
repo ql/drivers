@@ -16,4 +16,9 @@ RSpec.configure do |c|
   c.color = true
   c.run_all_when_everything_filtered = true
   c.deprecation_stream = '/dev/null'
+
+  c.before :each do
+    Mongoid::Clients.default.collections.select{ |c| c.name !~ /system/ }.each(&:drop)
+    Task.create_indexes
+  end
 end

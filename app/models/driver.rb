@@ -10,4 +10,8 @@ class Driver
     self.token = Token.create(role: 'driver')
     save
   end
+
+  def as_json(args)
+    {name: name, id: _id.to_s}
+  end
 end

@@ -8,4 +8,8 @@ class Manager
     self.token = Token.create(role: 'manager')
     save
   end
+
+  def as_json(*args)
+    {name: name, id: _id.to_s}
+  end
 end
