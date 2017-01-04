@@ -10,6 +10,6 @@ class Manager
   end
 
   def as_json(*args)
-    {name: name, id: _id.to_s}
+    {name: name, id: _id.to_s, token: token.token}
   end
 end

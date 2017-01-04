@@ -11,7 +11,7 @@ class Driver
     save
   end
 
-  def as_json(args)
-    {name: name, id: _id.to_s}
+  def as_json(*args)
+    {name: name, id: _id.to_s, token: token.token}
   end
 end

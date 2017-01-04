@@ -1,9 +1,8 @@
 class Drivers < Sinatra::Base
   before do
-    if request.body.size > 0
-      request.body.rewind
-      @payload = ActiveSupport::JSON.decode(request.body.read)
-    end
+    request.body.rewind
+    data = request.body.read
+    @payload = ActiveSupport::JSON.decode(data) if data.size > 0
   end
 
 
@@ -25,7 +24,12 @@ class Drivers < Sinatra::Base
   end
 
   post '/tasks', authorized: :manager do
-    json Task.create(@payload)
+    task = Task.new(@payload)
+    if task.save
+      json task
+    else
+      json task.errors, status: 400
+    end
   end
 
   post '/tasks/available', authorized: :any do
@@ -38,11 +42,11 @@ class Drivers < Sinatra::Base
   end
 
   put '/tasks/:id/assign', authorized: :driver do
-    json Task.find(params[:id]).assign
+    json Task.find(params[:id]).tap { |task| task.assign! }
   end
 
   put '/tasks/:id/finish', authorized: :driver do
-    json Task.find(params[:id]).finalize!
+    json Task.find(params[:id]).tap { |task| task.finalize! }
   end
 
   get '/unauthorized' do

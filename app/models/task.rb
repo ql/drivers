@@ -9,6 +9,9 @@ class Task
 
   has_one :driver
 
+  validates :pickup, presence: true
+  validates :destination, presence: true
+
   state_machine :status, :initial => :new do
     event :assign do
       transition :new => :assigned
@@ -34,22 +37,22 @@ class Task
   end
 
   def pickup
-    self[:pickup][:coordinates].reverse
+    self[:pickup].try(:fetch, "coordinates").try(:reverse)
   end
 
   def pickup=(arr)
-    self[:pickup] = {type: "Point", coordinates: arr.reverse.map(&:to_f) }
+    self[:pickup] = {type: "Point", coordinates: arr.reverse.map(&:to_f)}.stringify_keys
   end
 
   def destination
-    self[:destination][:coordinates].reverse
+    self[:destination].try(:fetch, "coordinates", []).try(:reverse)
   end
 
   def destination=(arr)
-    self[:destination] = {type: "Point", coordinates: arr.reverse.map(&:to_f) }
+    self[:destination] = {type: "Point", coordinates: arr.reverse.map(&:to_f) }.stringify_keys
   end
 
   def as_json(*args)
-    {pickup: pickup, destination: destination, id: _id.to_s}
+    {pickup: pickup, status: status, destination: destination, id: _id.to_s}
   end
 end
