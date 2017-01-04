@@ -1,3 +1,7 @@
+### Prerequisites
+Ruby 2.3
+MongoDB (set to at localhost:21017/drivers)
+
 ### Initialization
 ```
 $ bundle exec ruby -rbundler -r './drivers.rb' -e 'puts %w(Driver1 Driver2).map {|name| Driver.create(name: name).as_json}'
